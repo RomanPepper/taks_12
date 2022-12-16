@@ -1,9 +1,9 @@
 package ru.cs.vsu.pertsev;
 
-import java.util.ArrayList;
-import java.util.List;
+import java.util.*;
 
 public class Logic {
+
     public static TreeNode solution(String inputStr) throws MyException {
         inputStr = advancedStrip(inputStr, "()[]");
 
@@ -13,18 +13,19 @@ public class Logic {
 
         if (branchLen == 1) {
             inputArray = new String[]{inputStr.strip()};
-            vertexValue = inputArray[0];
+            vertexValue = advancedStrip(inputArray[0], "()[]");
 
         } else if (branchLen > 1) {
             inputArray = specificStringSplit(inputStr);
-            vertexValue = inputArray[0];
+            vertexValue = advancedStrip(inputArray[0], "()[]");
 
         } else {
             throw new MyException("Solution method error...");
         }
 
 
-        TreeNode node = new TreeNode(vertexValue, stringArrayToNodeList(inputArray));
+        List<TreeNode> supportList = stringArrayToNodeList(inputArray);
+        TreeNode node = new TreeNode(vertexValue, supportList.subList(1, supportList.size()));
 
         return node;
     }
@@ -43,8 +44,8 @@ public class Logic {
                 CustomTransmitter transmitter = specificStringToStringArray(elem);
 
                 String localVertex = transmitter.getVertex();
-                String[] localChildrenList = transmitter.getElemsArray();
-                TreeNode compositeNode = new TreeNode(localVertex, stringArrayToNodeList(localChildrenList));
+                String[] localChildrenList = Arrays.copyOfRange(transmitter.getElemsArray(), 1, transmitter.getElemsArray().length);
+                TreeNode compositeNode = new TreeNode(advancedStrip(localVertex, "()[]"), stringArrayToNodeList(localChildrenList));
                 nodeList.add(compositeNode);
             }
         }
@@ -61,7 +62,7 @@ public class Logic {
 
         if (branchLen == 1) {
             inputArray = new String[]{inputStr.strip()};
-            vertexValue = inputArray[0];
+            vertexValue = advancedStrip(inputArray[0], "()[]");
 
         } else if (branchLen > 1) {
             try{
@@ -69,7 +70,7 @@ public class Logic {
             } catch (Exception exception) {
                 throw new MyException("Некорректно введённые данные");
             }
-            vertexValue = inputArray[0];
+            vertexValue = advancedStrip(inputArray[0], "()[]");
 
         } else {
             throw new MyException("strToStringArray method error");
@@ -78,60 +79,31 @@ public class Logic {
         return new CustomTransmitter(vertexValue, inputArray);
     }
 
-    public static boolean isNested(String elem) {
-        return String.valueOf(elem.toCharArray()[0]).equals("(");
-    }
-
     public static String advancedStrip(String processedString, String charsToDelete) {
-//        int countBeginFinal = 0;
-//        int countEndFinal = 0;
-
-//        for (char charToDelete : charsToDelete.toCharArray()) {
-//            int countBeginCurr = 0;
-//            for (char strI : processedString.toCharArray()) {
-//                if (strI == charToDelete) {
-//                    countBeginCurr++;
-//                } else {
-//                    break;
-//                }
-//            }
-//
-//            int countEndCurr = 0;
-//            for (char strI : reverseCharArray(processedString.toCharArray())) {
-//                if (strI == charToDelete) {
-//                    countEndCurr++;
-//                } else {
-//                    break;
-//                }
-//            }
-//
-//            countBeginFinal = Math.max(countBeginCurr, countBeginFinal);
-//            countEndFinal = Math.max(countEndCurr, countEndFinal);
-//        }
+        processedString = processedString.strip();
 
         boolean putAwayBeginElem = false;
         boolean putAwayEndElem = false;
+        char[] charsElems = processedString.toCharArray();
 
         for(char elem: charsToDelete.toCharArray()) {
-            if(processedString.toCharArray()[0] == elem) {
+            if(charsElems[0] == elem) {
                 putAwayBeginElem = true;
             }
-            if(processedString.toCharArray()[processedString.length() - 1] == elem) {
+            if(charsElems[processedString.length() - 1] == elem) {
                 putAwayEndElem = true;
             }
         }
 
-        if(putAwayEndElem && putAwayBeginElem) {
-            return
+        if(putAwayBeginElem && putAwayEndElem) {
+            return processedString.substring(1, processedString.length() - 1);
+        } else if(putAwayBeginElem && !putAwayEndElem) {
+            return processedString.substring(1);
+        } else if (!putAwayBeginElem && putAwayEndElem) {
+            return processedString.substring(0, processedString.length() - 1);
+        } else {
+            return processedString;
         }
-    }
-
-    public static char[] reverseCharArray(char[] array) {
-        char[] arrayFinal = new char[array.length];
-        for (int i = 0; i < array.length; i++) {
-            arrayFinal[array.length - i - 1] = array[i];
-        }
-        return arrayFinal;
     }
 
     public static String[] specificStringSplit(String processedString) {
@@ -170,16 +142,16 @@ public class Logic {
                     }
                     if ((countOpenBack == countCloseBack) && (countOpenFront == countCloseFront)) {
                         //Какой-то символ, вероятность попадания которого во входные данные минимальна
-                        charArr[i] = "‽".charAt(0);
+                        charArr[i] = "!".charAt(0);
                     }
                 }
             }
         }
-        return String.valueOf(charArr).split("‽");
+        return String.valueOf(charArr).split("!");
     }
 }
-// 1.    "(a, b, (c), d)"    или    "(a, second, (abc, y, (x, 7), uuu, (8, 9, (10, 1)), abcddcdba)"
-// 2.    "a, b, (c), d" или  "a, second, (abc, y, (x, 7), uuu, (8, 9, (10, 1)), abcddcdba"
+
+
 
 
 
