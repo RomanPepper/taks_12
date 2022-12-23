@@ -65,7 +65,7 @@ public class Logic {
             vertexValue = advancedStrip(inputArray[0], "()[]");
 
         } else if (branchLen > 1) {
-            try{
+            try {
                 inputArray = specificStringSplit(inputStr);
             } catch (Exception exception) {
                 throw new MyException("Некорректно введённые данные");
@@ -86,18 +86,18 @@ public class Logic {
         boolean putAwayEndElem = false;
         char[] charsElems = processedString.toCharArray();
 
-        for(char elem: charsToDelete.toCharArray()) {
-            if(charsElems[0] == elem) {
+        for (char elem : charsToDelete.toCharArray()) {
+            if (charsElems[0] == elem) {
                 putAwayBeginElem = true;
             }
-            if(charsElems[processedString.length() - 1] == elem) {
+            if (charsElems[processedString.length() - 1] == elem) {
                 putAwayEndElem = true;
             }
         }
 
-        if(putAwayBeginElem && putAwayEndElem) {
+        if (putAwayBeginElem && putAwayEndElem) {
             return processedString.substring(1, processedString.length() - 1);
-        } else if(putAwayBeginElem && !putAwayEndElem) {
+        } else if (putAwayBeginElem && !putAwayEndElem) {
             return processedString.substring(1);
         } else if (!putAwayBeginElem && putAwayEndElem) {
             return processedString.substring(0, processedString.length() - 1);
@@ -149,6 +149,16 @@ public class Logic {
         }
         return String.valueOf(charArr).split("!");
     }
+
+    public static String duplicateStr(String inputStr, int count) {
+        StringBuilder sb = new StringBuilder();
+
+        for(int i = 0; i < count; i++) {
+            sb.append(inputStr);
+        }
+        return sb.toString();
+    }
+
 }
 
 
