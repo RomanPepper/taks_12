@@ -7,6 +7,7 @@ import java.util.Set;
 
 public class Main {
     public static void main(String[] args) throws MyException {
+        //TreeNode amogus = Logic.solution("(a, b, (c), d)");
         TreeNode amogus = Logic.solution("(a, second, (abc, y, (x, 7), uuu, (8, 9, (10, 1))), abcddcdba)");
 
         Set<Integer> supportSet = new HashSet<>();

@@ -28,7 +28,6 @@ public class TreeNode {
 
     public static void printTreeNode(TreeNode node, int globalDepth, Set<Integer> supportSet) {
 
-
         //Печаталка
         if (globalDepth == 0) {
             System.out.println(node.getVertex());
@@ -87,10 +86,3 @@ public class TreeNode {
 
     }
 }
-//При проходе по массиву потомков "a" я должен наткнуться на second и передать внутрь пустой массив,
-//  а вот, когда наткнуть на abc,у которого есть потомки, должен передать, что при globalDepth == 0,
-//  его потомки должны распечатать "| " по globalDepth == 0, т.к. после меня будут ещё siblings. Затем, я зайду в abc: дойду до y и передам внутрь
-//  пустой массив, а когда наткнусь на x, то передам его потомкам то, что дополнительно с globalDepth == 0 нужно
-//  ещё и по globalDepth == 1 распечатать "| ", т.к. после меня будут siblings. А когда дойду до 8, то, т.к. после меня
-//  уже нет siblings в очереди на обработку, я не передаю внутрь дополнительный globalDepth == 1, а
-//  только globalDepth == 0.
